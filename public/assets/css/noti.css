@@ -1,0 +1,54 @@
+.alert {
+    padding: 15px 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    z-index: 9999; /* Hiển thị ở trên các phần tử khác */
+    max-width: 300px;
+    font-size: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0; /* Bắt đầu ở trạng thái ẩn */
+    transform: translateX(30px); /* Đưa thông báo sang phải ngoài màn hình */
+    animation: toast-show 0.5s forwards;
+ }
+ 
+ .alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+ }
+ 
+ .alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+ }
+ 
+ .close-btn {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    font-size: 30px;
+    cursor: pointer;
+    color: #555;
+    transition: color 0.3s;
+ }
+ 
+ .close-btn:hover {
+    color: #000;
+ }
+
+ @keyframes toast-show {
+    0% {
+       opacity: 0;
+       transform: translateX(30px); /* Đưa thông báo ra ngoài màn hình */
+    }
+    100% {
+       opacity: 1;
+       transform: translateX(0); /* Đưa thông báo về vị trí bình thường */
+    }
+ }
+ 

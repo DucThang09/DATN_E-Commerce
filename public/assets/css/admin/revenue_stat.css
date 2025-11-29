@@ -1,0 +1,657 @@
+/* ===== HEADER & FILTER ===== */
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.content-header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 4px;
+}
+
+.content-header p {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+/* thanh tìm kiếm */
+.revenue-filters {
+    margin-bottom: 12px;
+}
+
+.revenue-filters .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-input-wrapper {
+    position: relative;
+    flex: 1;
+    max-width: 320px;
+}
+
+.search-input-wrapper i {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    font-size: 13px;
+}
+
+#search-input {
+    width: 100%;
+    padding: 7px 10px 7px 28px;
+    border-radius: 999px;
+    border: 1px solid #d1d5db;
+    font-size: 13px;
+    outline: none;
+}
+
+#search-input:focus {
+    border-color: #f97373;
+    box-shadow: 0 0 0 1px rgba(249, 115, 115, 0.3);
+}
+
+/* nút lọc */
+.filter-btn {
+    border: none;
+    border-radius: 999px;
+    padding: 7px 14px;
+    background: #f97373;
+    color: #fff;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.filter-btn i {
+    font-size: 12px;
+}
+
+/* ===== PANEL & TABLE ===== */
+.panel {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 16px 18px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    border: 1px solid #e5e7eb;
+}
+
+.panel-header {
+    margin-bottom: 10px;
+}
+
+.panel-header h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+}
+
+/* wrapper có thanh cuộn dọc cho bảng */
+.revenue-table-wrapper {
+    max-height: 480px;          /* chỉ phần list cuộn */
+    overflow-y: auto;
+}
+
+/* bảng */
+.revenue-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.revenue-table thead th {
+    background: #f3f4f6;
+    padding: 8px 10px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 1px solid #e5e7eb;
+    white-space: nowrap;
+}
+
+.revenue-table thead a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.revenue-table tbody td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f3f4f6;
+    background: #fff;
+}
+
+.revenue-table tbody tr:nth-child(even) td {
+    background: #f9fafb;
+}
+
+/* căn cột tên & cột số */
+.col-name {
+    max-width: 260px;
+}
+
+/* 3–8 là cột tiền/số => căn phải */
+.revenue-table tbody td:nth-child(3),
+.revenue-table tbody td:nth-child(4),
+.revenue-table tbody td:nth-child(5),
+.revenue-table tbody td:nth-child(6),
+.revenue-table tbody td:nth-child(7),
+.revenue-table tbody td:nth-child(8),
+.revenue-table thead th:nth-child(3),
+.revenue-table thead th:nth-child(4),
+.revenue-table thead th:nth-child(5),
+.revenue-table thead th:nth-child(6),
+.revenue-table thead th:nth-child(7),
+.revenue-table thead th:nth-child(8) {
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* doanh thu nổi bật hơn */
+.col-revenue {
+    font-weight: 600;
+    color: #16a34a;
+}
+
+/* ===== PHÂN TRANG ===== */
+.pagination-wrapper {
+    margin-top: 12px;
+    display: flex;
+    justify-content: center;
+}
+
+/* Laravel bootstrap-4 pagination */
+.pagination-wrapper ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+    display: inline-flex;
+    gap: 4px;
+}
+
+.pagination-wrapper .page-item .page-link {
+    border-radius: 999px;
+    border: 1px solid #e5e7eb;
+    padding: 4px 10px;
+    font-size: 13px;
+    color: #4b5563;
+    background: #fff;
+}
+
+.pagination-wrapper .page-item.active .page-link {
+    background: #f97373;
+    border-color: #f97373;
+    color: #fff;
+}
+
+.pagination-wrapper .page-item.disabled .page-link {
+    opacity: 0.4;
+    cursor: default;
+}
+.time-filter-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 12px;
+}
+
+.filter-select {
+    border-radius: 999px;
+    border: 1px solid #e5e7eb;
+    padding: 6px 10px;
+    font-size: 13px;
+}
+
+.filter-month {
+    border-radius: 999px;
+    border: 1px solid #e5e7eb;
+    padding: 6px 10px;
+    font-size: 13px;
+}
+
+/* summary card như lần trước gợi ý, nếu chưa có thì thêm luôn */
+.revenue-summary {
+    margin-top: 10px;
+    margin-bottom: 12px;
+    display: flex;
+    gap: 12px;
+}
+
+.summary-card {
+    background: #f9fafb;
+    border-radius: 16px;
+    padding: 10px 14px;
+    border: 1px solid #e5e7eb;
+}
+
+.summary-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #6b7280;
+}
+
+.summary-value {
+    display: block;
+    margin-top: 4px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.summary-sub {
+    display: block;
+    margin-top: 2px;
+    font-size: 11px;
+    color: #6b7280;
+}
+/* ===== Summary cards trên bảng ===== */
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+.summary-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 14px 18px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    border: 1px solid #e5e7eb;
+}
+
+.summary-label {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 4px;
+}
+
+.summary-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #16a34a;
+}
+
+.summary-value.highlight {
+    color: #22c55e;
+}
+
+.summary-product {
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 2px;
+}
+
+/* ===== Select filter trạng thái ===== */
+.status-filter-select {
+    min-width: 180px;
+    height: 44px;
+    border-radius: 999px;
+    border: 1px solid #e5e7eb;
+    padding: 0 14px;
+    font-size: 14px;
+    color: #374151;
+    background: #ffffff;
+    outline: none;
+    margin-left: 10px;
+    margin-right: 8px;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+    appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, #9ca3af 50%),
+                      linear-gradient(135deg, #9ca3af 50%, transparent 50%);
+    background-position: calc(100% - 14px) 50%, calc(100% - 9px) 50%;
+    background-size: 6px 6px, 6px 6px;
+    background-repeat: no-repeat;
+}
+
+.status-filter-select:focus {
+    border-color: #fb7185;
+    box-shadow: 0 0 0 2px rgba(248, 113, 113, 0.15);
+}
+/* Khung bọc input tháng/năm */
+.month-input-wrapper {
+    display: inline-flex;
+    align-items: center;
+    max-width: 150px;
+    height: 40px;
+    padding: 0 16px;          /* hai bên */
+    border-radius: 999px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+/* Chính ô nhập MM/YYYY */
+#monthYearPicker {
+    width: 120px;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 14px;
+    color: #111827;
+
+    /* đẩy số sang phải, tránh sát icon */
+    padding-left: 24px;       /* tăng/giảm tùy ý (20–30px) */
+    box-sizing: border-box;
+}
+
+/* placeholder cho đẹp */
+#monthYearPicker::placeholder {
+    color: #9ca3af;
+}
+
+/* focus khung */
+.month-input-wrapper:focus-within {
+    border-color: #fb7185;
+    box-shadow: 0 0 0 1px rgba(248, 113, 113, 0.2);
+}
+.revenue-filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.revenue-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.mini-select {
+    height: 40px;
+    padding: 0 10px;
+    border-radius: 999px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    font-size: 13px;
+    color: #374151;
+}
+
+.export-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* mini stats */
+.mini-stats-row {
+    display: flex;
+    gap: 16px;
+    margin: 16px 0 24px;
+    flex-wrap: wrap;
+}
+
+.mini-stat-card {
+    flex: 1 1 220px;
+    padding: 14px 18px;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+    border: 1px solid #f3f4f6;
+}
+
+.mini-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #6b7280;
+}
+
+.mini-value {
+    display: block;
+    margin-top: 4px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.mini-sub {
+    display: block;
+    margin-top: 2px;
+    font-size: 12px;
+    color: #6b7280;
+}
+/* ============ BỘ LỌC THÁNG + TRẠNG THÁI ============ */
+
+.revenue-filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+
+/* Form chọn tháng bên trái */
+.revenue-filters .search-bar.mY {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+/* Ô chọn tháng – bo tròn giống input search */
+.month-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 220px;
+    border-radius: 999px;
+    background: #fff;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+    border: 1px solid #e5e7eb;
+    padding-inline: 14px;
+}
+
+.month-input-wrapper i {
+    font-size: 14px;
+    color: #6b7280;
+    margin-right: 6px;
+}
+
+/* Đẩy số MM/YYYY sang bên phải 1 chút cho cân */
+.month-input-wrapper input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 14px;
+    color: #111827;
+    padding: 8px 0;
+    background: transparent;
+}
+
+/* Select nhỏ: trạng thái + phương thức */
+.mini-select {
+    height: 40px;
+    padding: 0 14px;
+    border-radius: 999px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    font-size: 13px;
+    color: #374151;
+    outline: none;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.03);
+}
+
+.mini-select:focus {
+    border-color: #fb7185;
+    box-shadow: 0 0 0 2px rgba(248, 113, 113, 0.15);
+}
+
+/* Nhóm nút reset + export bên phải */
+.revenue-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Nút export */
+.export-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding-inline: 14px;
+    height: 40px;
+    border-radius: 999px;
+    border: 1px solid #10b981;
+    background: #ecfdf5;
+    color: #047857;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.export-btn i {
+    font-size: 14px;
+}
+
+.export-btn:hover {
+    background: #d1fae5;
+}
+
+/* ============ MINI SUMMARY CARDS ============ */
+
+.mini-stats-row {
+    display: flex;
+    gap: 16px;
+    margin: 18px 0 26px;
+    flex-wrap: wrap;
+}
+
+.mini-stat-card {
+    flex: 1 1 240px;
+    padding: 14px 18px;
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.05);
+    border: 1px solid #f3f4f6;
+    position: relative;
+    overflow: hidden;
+}
+
+/* viền màu nhẹ bên trái từng card */
+.mini-stat-card::before {
+    content: "";
+    position: absolute;
+    inset-block: 12px;
+    left: 0;
+    width: 4px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #fb7185, #f97316);
+}
+
+/* text bên trong */
+.mini-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #6b7280;
+}
+
+.mini-value {
+    display: block;
+    margin-top: 4px;
+    font-size: 22px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.mini-sub {
+    display: block;
+    margin-top: 2px;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+/* ============ TOP 5 SẢN PHẨM ============ */
+
+.panel .revenue-table th,
+.panel .revenue-table td {
+    font-size: 13px;
+}
+
+/* làm cột tiền trong top 5 nhìn nổi hơn */
+.revenue-table td:last-child {
+    font-weight: 600;
+    color: #10b981;
+}
+
+/* ============ RESPONSIVE ============ */
+
+@media (max-width: 992px) {
+    .revenue-filters {
+        align-items: flex-start;
+    }
+
+    .revenue-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 640px) {
+    .revenue-filters .search-bar.mY {
+        flex-wrap: wrap;
+    }
+
+    .month-input-wrapper {
+        width: 100%;
+    }
+
+    .mini-stats-row {
+        flex-direction: column;
+    }
+
+    .mini-stat-card {
+        flex: 1 1 auto;
+    }
+}
+/* Header cột Lợi nhuận */
+.revenue-table th.profit-header {
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* Link trong header sortable */
+.sortable-header {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    color: #4b5563;             /* xám đậm */
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.15s ease;
+}
+
+.sortable-header:hover {
+    color: #111827;             /* đậm hơn khi hover */
+}
+
+/* Icon sort chung */
+.sort-icon {
+    font-size: 12px;
+    color: #9ca3af;             /* xám nhạt */
+}
+
+/* Khi cột này đang được sort */
+.sortable-header.is-active {
+    color: #16a34a;             /* xanh “lãi” */
+}
+
+.sortable-header.is-active .sort-icon {
+    color: #16a34a;
+}

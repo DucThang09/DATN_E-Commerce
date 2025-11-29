@@ -1,0 +1,173 @@
+/* NỀN NGOÀI */
+body {
+    min-height: 100vh;
+    margin: 0;
+    background: #f4f0f1; /* nền ngoài gần trắng */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* THÔNG BÁO LỖI */
+.message {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ff4d4f;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    font-size: 14px;
+}
+
+.message i {
+    cursor: pointer;
+}
+
+/* KHUNG GIỮA */
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-wrapper {
+    background: #ffffff;          /* card trắng */
+    width: 420px;
+    padding: 40px 40px 30px;
+    border-radius: 6px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+    color: #333333;              /* chữ đen */
+}
+
+/* LOGO + TÊN APP */
+.text-center {
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.login-logo-icon {
+    font-size: 30px;
+    margin-bottom: 4px;
+    color: #333333;
+}
+
+.login-logo {
+    font-size: 26px;
+    font-weight: 600;
+}
+
+.login-logo span {
+    color: #333333;              /* chữ đen */
+    letter-spacing: 1px;
+}
+
+/* TITLE */
+.login-title {
+    text-align: center;
+    margin: 18px 0 24px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #333333;              /* chữ đen */
+}
+
+/* FORM */
+.form-group {
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 13px;
+    color: #555555;              /* xám đậm */
+    margin-bottom: 6px;
+}
+
+.login-input {
+    padding: 10px 12px;
+    border-radius: 4px;
+    border: 1px solid #d0d7e2;   /* viền xám nhạt */
+    background-color: #ffffff;   /* input trắng */
+    color: #333333;              /* chữ đen */
+    outline: none;
+    font-size: 14px;
+}
+
+.login-input::placeholder {
+    color: #999999;
+}
+
+.login-input:focus {
+    border-color: #00c6d7;
+    box-shadow: 0 0 0 1px #00c6d7;
+    background-color: #ffffff;
+    color: #111111;
+}
+
+/* REMEMBER ME */
+.form-remember {
+    margin-bottom: 18px;
+}
+
+.remember-label {
+    font-size: 13px;
+    color: #555555;              /* chữ đen/xám */
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.remember-checkbox {
+    width: 14px;
+    height: 14px;
+}
+
+/* NÚT LOGIN */
+.btn-login {
+    width: 100%;
+    padding: 10px 0;
+    border-radius: 4px;
+    border: none;
+    background-color: #FF416C;   /* giữ màu nút cho nổi */
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.btn-login:hover {
+    background-color: #FF416C;
+    transform: translateY(-1px);
+}
+
+/* FOOTER LINK */
+.login-footer {
+    margin-top: 18px;
+    font-size: 13px;
+    color: #777777;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.login-footer a {
+    color: #0c0c0c;              /* link xanh */
+    text-decoration: none;
+}
+
+.login-footer a:hover {
+    color: #FF416C;
+    text-decoration: underline;
+}
+
+/* ICON KHOÁ */
+.login-footer i {
+    margin-right: 4px;
+}

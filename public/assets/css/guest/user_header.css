@@ -1,0 +1,411 @@
+/* ===== HEADER NEW ===== */
+
+.main-header {
+    background: #ffffff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+.main-header__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+/* Logo */
+.main-header__logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.logo-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: #1d4ed8;
+    /* xanh dương giống app */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+
+.logo-text {
+    font-weight: 700;
+    font-size: 20px;
+    color: #111827;
+}
+
+.logo-text span {
+    color: #1d4ed8;
+}
+
+/* Nav trái */
+.main-header__nav {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.nav-link {
+    font-size: 14px;
+    color: #374151;
+    text-decoration: none;
+    padding: 6px 4px;
+}
+
+.nav-link:hover {
+    color: #1d4ed8;
+}
+
+/* ===== DROPDOWN DANH MỤC ===== */
+
+.nav-category {
+    position: relative;
+    display: inline-block;
+    /* kéo vùng hover xuống bao luôn dropdown */
+}
+
+/* nút "Danh mục" */
+.nav-category__btn {
+    border: none;
+    background: transparent;
+    font-size: 16px;
+    color: #1d4ed8;
+    /* xanh như hình */
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 0;
+}
+
+.nav-category__btn i {
+    font-size: 10px;
+}
+
+/* HỘP DROPDOWN */
+.nav-category__dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 360px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.15);
+    padding: 16px 24px;
+
+    display: none;
+    /* ẩn mặc định */
+
+    /* các thuộc tính grid vẫn giữ nguyên,
+       khi nào display thành grid thì tự áp dụng */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 40px;
+    row-gap: 12px;
+    z-index: 1000;
+    margin-top: 18px;
+}
+.nav-category::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    height: 20px;          /* cầu nối từ chữ "Danh mục" xuống box */
+}
+/* hover "Danh mục" => hiện dropdown */
+.nav-category:hover .nav-category__dropdown {
+    display: grid;
+    /* hiện ra + dùng layout 2 cột */
+}
+
+/* item bên trong */
+.nav-category__dropdown a {
+    position: relative;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #111827;
+    text-decoration: none;
+    padding-left: 18px;
+    /* nhường chỗ cho dấu › */
+}
+
+/* dấu › bên trái mỗi item */
+.nav-category__dropdown a::before {
+    content: "›";
+    position: absolute;
+    left: 0;
+    font-size: 14px;
+    color: #9ca3af;
+}
+
+/* hover item */
+.nav-category__dropdown a:hover {
+    color: #1d4ed8;
+}
+
+
+/* hover mở dropdown */
+
+
+/* Ô tìm kiếm */
+.main-header__search {
+    flex: 1;
+    max-width: 650px;
+    height: 40px;
+    border-radius: 999px;
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 8px;
+}
+
+.main-header__search i {
+    font-size: 14px;
+    color: #9ca3af;
+}
+
+.main-header__search input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 14px;
+    color: #111827;
+}
+
+.main-header__search input::placeholder {
+    color: #9ca3af;
+}
+
+/* Khu bên phải */
+.main-header__right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Icon button */
+.icon-btn {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #111827;
+}
+
+.icon-btn:hover {
+    background: #f3f4f6;
+}
+
+.icon-badge {
+    position: absolute;
+    top: -4px;
+    right: -2px;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 999px;
+    background: #ef4444;
+    color: #fff;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Account dropdown */
+.account-dropdown {
+    position: relative;
+    display: inline-block;
+}
+.account-btn {
+    border: none;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #111827;
+}
+
+.account-btn i {
+    font-size: 14px;
+}
+
+.account-btn .chevron {
+    font-size: 10px;
+    color: #6b7280;
+}
+
+.account-menu {
+    position: absolute;
+    right: 0;
+
+    /* tụt xuống dưới icon 8px nhưng không dùng margin */
+    top: calc(100% + 8px);
+    margin-top: 14px;
+
+    min-width: 200px;
+    background: #ffffff;
+    box-shadow: 0 8px 16px rgba(15, 23, 42, 0.12);
+    border-radius: 10px;
+    padding: 8px 0;
+    display: none;
+    z-index: 1000;
+}
+.account-dropdown::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    height: 22px;              /* khoảng “cầu nối” từ nút xuống menu */
+}
+.account-dropdown:hover .account-menu {
+    display: block;
+}
+
+.account-menu__info {
+    padding: 8px 14px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.account-name {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.account-menu__text {
+    padding: 8px 14px;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.account-menu__link {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 8px 14px;
+    font-size: 14px;
+    text-decoration: none;
+    color: #111827;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.account-menu__link:hover {
+    background: #f3f4f6;
+}
+
+.account-menu__logout {
+    color: #b91c1c;
+}
+
+/* Logo to hơn */
+.logo-text {
+    font-weight: 700;
+    font-size: 24px;
+    /* trước là 20px */
+    color: #111827;
+}
+
+.logo-text span {
+    color: #1d4ed8;
+}
+
+/* Menu trái – chữ to hơn */
+.main-header__nav .nav-link {
+    font-size: 16px;
+    /* trước ~14px */
+    color: #374151;
+    text-decoration: none;
+    padding: 8px 6px;
+}
+
+/* Nút "Danh mục" to hơn */
+.nav-category__btn {
+    border: none;
+    background: transparent;
+    font-size: 16px;
+    /* trước 14px */
+    color: #111827;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Chữ trong dropdown danh mục */
+.nav-category__dropdown a {
+    font-size: 15px;
+}
+
+/* Chữ trong ô tìm kiếm cho dễ nhìn hơn */
+.main-header__search input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 15px;
+    /* tăng nhẹ */
+    color: #111827;
+}
+
+/* Icon giỏ / tim to hơn, nút cũng to hơn */
+.icon-btn {
+    position: relative;
+    width: 40px;
+    /* trước 36px */
+    height: 40px;
+    /* trước 36px */
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #111827;
+}
+
+.icon-btn i {
+    font-size: 18px;
+    /* trước ~14–16px */
+}
+
+/* Khu tài khoản – chữ & icon to hơn */
+.account-btn {
+    border: none;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    /* trước 14px */
+    color: #111827;
+}
+
+.account-btn i {
+    font-size: 18px;
+    /* icon user to hơn */
+}
+
+.account-btn .chevron {
+    font-size: 11px;
+}
