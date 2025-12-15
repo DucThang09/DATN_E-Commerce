@@ -50,15 +50,17 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::post('/register', [RegisterController::class, 'register']);
 
 Route::post('/contact', [ContactController::class, 'sendMessage'])->name('contact.send');
+Route::get('/products/category/{slug}', [HomeController::class, 'showByCategory'])->name('products.category');
 Route::get('/products/{company}', [HomeController::class, 'showCompanyProducts'])->name('products.company');
-Route::get('/products/category/{category}', [HomeController::class, 'showByCategory'])->name('products.category');
+// dùng slug, không dùng tên category string nữa
+
+
 Route::get('/search', [SearchController::class, 'search'])->name('search');
 Route::post('/search', [SearchController::class, 'searchResults'])->name('search.results');
 Route::get('/shop', [ShopController::class, 'ShowShop'])->name('shop');
 Route::get('/category', [ShopController::class, 'ShowCategory'])->name('category');
 Route::get('/quick_view/{pid}', [WishlistCartController::class, 'quickView'])->name('quick.view');
 Route::get('/contact', [ContactController::class, 'showForm'])->name('contact.form');
-Route::get('/products/loai', [HomeController::class, 'showCategory'])->name('products.category1');
 
 Route::get('/verify-account/{email} ', [RegisterController::class, 'verify'])->name('verify');
 

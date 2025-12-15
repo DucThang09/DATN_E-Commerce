@@ -13,20 +13,27 @@ class HomeController extends Controller
 {
     public function index()
     {
-        
-        
-        $user_id = Auth::id(); 
-        // $products = Product::latest()->limit(6)->get();
-        $products = Product::orderBy('qty_sold', 'desc')->limit(6)->get();
-        $phones = Product::where('category', 'Điện Thoại')->get();
-        $headphones = Product::where('category', 'Tai nghe')->get();
-        $powerbank = Product::where('category', 'Sạc dự phòng')->get();
-        $chargers = Product::where('category', 'Sạc')->get();
-        $category = Category::all();
+        $user_id = Auth::id();
 
-        return view('home', compact('user_id', 'products', 'phones', 'headphones','powerbank', 'chargers','category'));
+        // Sản phẩm bán chạy (cho block "Sản phẩm nổi bật" / "Gợi ý cho bạn")
+        $topProducts = Product::orderBy('qty_sold', 'desc')
+            ->limit(6)
+            ->get();
+
+        // Lấy tất cả danh mục có sản phẩm để show trên home
+        $homeCategories = Category::whereHas('products')
+            ->with(['products' => function ($q) {
+                $q->orderByDesc('id')->take(10);   // mỗi danh mục lấy 10 sản phẩm mới nhất
+            }])
+            ->get();
+
+        return view('home', [
+            'user_id'        => $user_id,
+            'topProducts'    => $topProducts,
+            'homeCategories' => $homeCategories,
+        ]);
     }
-    
+
 
     public function showCompanyProducts($company)
     {
@@ -37,16 +44,29 @@ class HomeController extends Controller
         return view('company', compact('products', 'company'));
     }
 
-    public function showByCategory($category)
+    public function showByCategory($slug)
     {
-        $products = Product::where('category', $category)->get();  // Giả sử bạn có trường 'category' trong bảng sản phẩm
-        return view('category', compact('products', 'category'));
-    }
-       
-    public function showCategory($categories)
-    {
-        $categories = Category::all();
-        return view('home', compact('categories'));
-    }
+        $category = Category::where('slug', $slug)->firstOrFail();
 
+        $productsQuery = Product::where('category_id', $category->category_id);
+
+        // lọc theo brand (company) nếu có
+        $brand = request('brand');
+        if (!empty($brand)) {
+            $productsQuery->where('company', $brand);
+        }
+
+        $products = $productsQuery->paginate(12)->withQueryString();
+
+        // danh sách brand theo category (để render dãy logo)
+        $brands = Product::where('category_id', $category->category_id)
+            ->whereNotNull('company')
+            ->where('company', '!=', '')
+            ->select('company')
+            ->distinct()
+            ->orderBy('company')
+            ->pluck('company');
+
+        return view('category', compact('category', 'products', 'brands'));
+    }
 }

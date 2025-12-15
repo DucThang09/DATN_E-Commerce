@@ -53,11 +53,13 @@
                     </button>
 
                     <div class="nav-category__dropdown">
-                        <a href="{{ route('products.category', ['category' => 'Điện thoại']) }}">Điện thoại</a>
-                        <a href="{{ route('products.category', ['category' => 'Tai nghe']) }}">Tai nghe</a>
-                        <a href="{{ route('products.category', ['category' => 'Sạc dự phòng']) }}">Sạc dự phòng</a>
-                        <a href="{{ route('products.category', ['category' => 'Sạc']) }}">Sạc điện thoại</a>
+                        @foreach ($categories as $cat)
+                            <a href="{{ route('products.category', $cat->slug) }}">
+                                {{ $cat->category_name }}
+                            </a>
+                        @endforeach
                     </div>
+
                 </div>
 
                 {{-- Các mục bên cạnh --}}

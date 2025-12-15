@@ -27,17 +27,19 @@ class AppServiceProvider extends ServiceProvider
             $categories = Category::all();
             $view->with('categories', $categories);
         });
+
         Carbon::setLocale('vi');
+
         View::composer('components.admin_header', function ($view) {
-        // 5 thông báo mới nhất
-        $notifications = AdminNotification::orderByDesc('created_at')
-            ->limit(5)
-            ->get();
+            // 5 thông báo mới nhất
+            $notifications = AdminNotification::orderByDesc('created_at')
+                ->limit(5)
+                ->get();
 
-        // Số chưa đọc
-        $unreadCount = AdminNotification::where('is_read', false)->count();
+            // Số chưa đọc
+            $unreadCount = AdminNotification::where('is_read', false)->count();
 
-        $view->with(compact('notifications', 'unreadCount'));
+            $view->with(compact('notifications', 'unreadCount'));
         });
     }
 }

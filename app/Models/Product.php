@@ -11,20 +11,26 @@ class Product extends Model
 
     // Cập nhật mảng $fillable để bao gồm các trường mới
     protected $fillable = [
-        'name', 
+        'name',
         'price',
-        'purchase_price', 
+        'purchase_price',
         'qty_sold',
-        'details', 
-        'category',  // Thêm trường category
-        'company',   // Thêm trường company
-        'color',     // Thêm trường color
+        'details',
+        'category',      // cũ – có thể giữ lại
+        'company',
+        'color',
         'inventory',
-        'discount',  
-        'revenue',   
-        'image_01', 
-        'image_02', 
+        'discount',
+        'revenue',
+        'image_01',
+        'image_02',
         'image_03',
-              
+        'category_id',   // mới thêm
     ];
+
+    public function categoryModel()
+    {
+        // products.category_id -> categories.category_id
+        return $this->belongsTo(Category::class, 'category_id', 'category_id');
+    }
 }
