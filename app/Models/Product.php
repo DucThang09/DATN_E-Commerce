@@ -10,6 +10,7 @@ class Product extends Model
     use HasFactory;
 
     // Cập nhật mảng $fillable để bao gồm các trường mới
+    protected $table = 'products';
     protected $fillable = [
         'name',
         'price',
@@ -18,16 +19,14 @@ class Product extends Model
         'details',
         'category',      // cũ – có thể giữ lại
         'company',
-        'color',
-        'inventory',
         'discount',
         'revenue',
-        'image_01',
-        'image_02',
-        'image_03',
-        'category_id',   // mới thêm
+        'category_id',
+        'specs',   // mới thêm
     ];
-
+    protected $casts = [
+        'specs' => 'array',
+    ];
     public function categoryModel()
     {
         // products.category_id -> categories.category_id

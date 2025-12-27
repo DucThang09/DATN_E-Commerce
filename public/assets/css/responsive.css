@@ -87,6 +87,7 @@ img, svg, video {
   .catpage-products { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .catpage-brands   { grid-template-columns: repeat(8, minmax(0, 1fr)); }
   .cat-banner img   { height: 130px; }
+
 }
 
 /* =========================
@@ -247,6 +248,13 @@ img, svg, video {
   .catpage-products{ grid-template-columns: repeat(2, 1fr); }
   .catpage-brands{ grid-template-columns: repeat(5, 1fr); }
   .cat-banner img{ height: 150px; }
+  .cat-banner-prev,
+  .cat-banner-next{
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+  .cat-banner-prev{ left: 6px !important; }
+  .cat-banner-next{ right: 6px !important; }
 }
 
 /* =========================

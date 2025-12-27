@@ -67,8 +67,8 @@
                             <select name="category_filter">
                                 <option value="">Tất cả danh mục</option>
                                 @foreach ($categories as $category)
-                                    <option value="{{ $category->category_name }}"
-                                        {{ request('category_filter') == $category->category_name ? 'selected' : '' }}>
+                                    <option value="{{ $category->category_id }}"
+                                        {{ (string) request('category_filter') === (string) $category->category_id ? 'selected' : '' }}>
                                         {{ $category->category_name }}
                                     </option>
                                 @endforeach
@@ -211,36 +211,45 @@
 
                                     <td class="col-product">
                                         <div class="product-cell">
-                                            <img src="{{ asset('storage/' . $product->image_01) }}"
-                                                alt="{{ $product->name }}" class="product-thumb">
+                                            @php
+                                                $img = $product->v_image_01 ?? '';
+                                                $img = ltrim($img, '/');
+                                                $src = $img
+                                                    ? asset('storage/' . $img)
+                                                    : asset('assets/images/no-image.png');
+                                            @endphp
+
+                                            <img src="{{ $src }}" alt="{{ $product->name }}"
+                                                class="product-thumb">
+
                                             <div class="product-info">
                                                 <div class="product-name">{{ $product->name }}</div>
-                                                <div class="product-meta">
-                                                    {{ $product->company }} • {{ $product->color }}
-                                                </div>
                                             </div>
                                         </div>
                                     </td>
 
-                                    <td>{{ $product->category }}</td>
+                                    <td>
+                                        {{ optional($categories->firstWhere('category_id', $product->category_id))->category_name }}
+                                    </td>
 
                                     <td class="col-price">
                                         {{ number_format($product->price, 0, ',', '.') }}đ
                                     </td>
 
                                     {{-- Tồn kho --}}
-                                    <td>{{ $product->inventory }}</td>
+                                    {{-- Tồn kho (tổng tất cả màu) --}}
+                                    <td>{{ $product->total_inventory }}</td>
+                                    <td>{{ $product->total_qty_sold }}</td>
 
-                                    {{-- Đã bán --}}
-                                    <td>{{ $product->qty_sold }}</td>
 
                                     {{-- Trạng thái tồn kho --}}
                                     <td>
-                                        @if ($product->inventory > 0)
+                                        @if (($product->total_inventory ?? 0) > 0)
                                             <span class="status-badge status-instock">Còn hàng</span>
                                         @else
                                             <span class="status-badge status-outstock">Hết hàng</span>
                                         @endif
+
                                     </td>
 
                                     {{-- Thao tác --}}
@@ -251,20 +260,29 @@
                                                 data-id="{{ $product->id }}" data-name="{{ $product->name }}"
                                                 data-price="{{ $product->price }}"
                                                 data-purchase-price="{{ $product->purchase_price }}"
-                                                data-category="{{ $product->category }}"
+                                                data-category-id="{{ $product->category_id }}"
                                                 data-company="{{ $product->company }}"
-                                                data-color="{{ $product->color }}"
-                                                data-inventory="{{ $product->inventory }}"
-                                                data-qty-sold="{{ $product->qty_sold }}"
+                                                data-color="{{ $product->v_color }}"
+                                                data-color-product-id="{{ $product->colorProduct_id }}"
+                                                data-variant-id="{{ $product->variant_id }}"
+                                                data-inventory="{{ $product->total_inventory }}"
+                                                data-qty-sold="{{ $product->total_qty_sold }}"
                                                 data-discount="{{ $product->discount }}"
                                                 data-details="{{ e($product->details) }}"
-                                                data-image1-url="{{ asset('storage/' . $product->image_01) }}"
-                                                data-image2-url="{{ asset('storage/' . $product->image_02) }}"
-                                                data-image3-url="{{ asset('storage/' . $product->image_03) }}"
-                                                data-image1-path="{{ $product->image_01 }}"
-                                                data-image2-path="{{ $product->image_02 }}"
-                                                data-image3-path="{{ $product->image_03 }}">
+                                                data-image1-url="{{ asset('storage/' . $product->v_image_01) }}"
+                                                data-image2-url="{{ asset('storage/' . $product->v_image_02) }}"
+                                                data-image3-url="{{ asset('storage/' . $product->v_image_03) }}"
+                                                data-image1-path="{{ $product->v_image_01 }}"
+                                                data-image2-path="{{ $product->v_image_02 }}"
+                                                data-image3-path="{{ $product->v_image_03 }}"
+                                                data-specs='@json($product->specs ?? [])'>
                                                 <i class="fa-regular fa-pen-to-square"></i>
+                                            </a>
+                                            {{-- ✅ THÊM NÚT NÀY: Thêm màu --}}
+                                            <a href="#" class="icon-btn add js-open-add-variant" title="Thêm màu"
+                                                data-product-id="{{ $product->id }}"
+                                                data-product-name="{{ $product->name }}">
+                                                <i class="fa-solid fa-palette"></i>
                                             </a>
 
                                             <a href="{{ route('admin.products_delete', $product->id) }}"
@@ -272,6 +290,7 @@
                                                 title="Xóa">
                                                 <i class="fa-regular fa-trash-can"></i>
                                             </a>
+
                                         </div>
                                     </td>
                                 </tr>
@@ -322,13 +341,17 @@
                             <div class="inputRow">
                                 <div class="inputBox">
                                     <span>Danh Mục Sản Phẩm (bắt buộc)</span>
-                                    <select name="category" class="box" required>
+                                    <select name="category_id" class="box" required>
                                         <option value="" disabled selected>Chọn danh mục sản phẩm</option>
                                         @foreach ($categories as $category)
-                                            <option value="{{ $category->category_name }}">{{ $category->category_name }}
+                                            <option value="{{ $category->category_id }}"
+                                                data-slug="{{ \Illuminate\Support\Str::slug($category->category_name) }}"
+                                                {{ (string) old('category_id') === (string) $category->category_id ? 'selected' : '' }}>
+                                                {{ $category->category_name }}
                                             </option>
                                         @endforeach
                                     </select>
+
                                 </div>
                                 <div class="inputBox">
                                     <span>Thương Hiệu (bắt buộc)</span>
@@ -363,28 +386,23 @@
                                         placeholder="Nhập số lượng trong kho" value="{{ old('inventory') }}">
                                 </div>
                                 <div class="inputBox">
-                                    <span>Số sản phẩm đã bán</span>
-                                    <input type="number" name="qty_sold" class="box" min="0"
-                                        style="opacity: 0.6; cursor: not-allowed;" placeholder="Số lượng sản phẩm đã bán"
-                                        value="{{ old('qty_sold', 0) }}" readonly>
+                                    <span>Mã giảm giá(%)</span>
+                                    <input name="discount" type="number" min="0" class="box" max="100"
+                                        placeholder="Nhập mã giảm giá" value="{{ old('discount') }}">
                                 </div>
                             </div>
 
                             <div class="inputRow">
                                 <div class="inputBox">
                                     <span>Màu Sắc Sản Phẩm (bắt buộc)</span>
-                                    <select name="color" class="box" required>
+                                    <select name="colorProduct_id" class="box" required>
                                         <option value="" disabled selected>Chọn màu sắc sản phẩm</option>
                                         @foreach ($color as $colorP)
-                                            <option value="{{ $colorP->colorProduct }}">{{ $colorP->colorProduct }}
+                                            <option value="{{ $colorP->colorProduct_id }}">
+                                                {{ $colorP->colorProduct }}
                                             </option>
                                         @endforeach
                                     </select>
-                                </div>
-                                <div class="inputBox">
-                                    <span>Mã giảm giá</span>
-                                    <input name="discount" type="number" min="0" class="box" max="100"
-                                        placeholder="Nhập mã giảm giá" value="{{ old('discount', 0) }}">
                                 </div>
                             </div>
 
@@ -395,6 +413,24 @@
                                         cols="30" rows="4">{{ old('details') }}</textarea>
                                 </div>
                             </div>
+                            <div class="inputRow">
+                                <div class="inputBox inputBox-full">
+                                    <span>Thông số kỹ thuật</span>
+
+                                    {{-- JS sẽ render input theo danh mục --}}
+                                    <div id="addSpecFields"></div>
+
+                                    <button type="button" class="btn-light" id="addSpecRowBtn"
+                                        style="margin-top:10px;">
+                                        + Thêm dòng thông số
+                                    </button>
+
+                                    <small style="display:block; margin-top:8px; color:#6b7280;">
+                                        Chọn danh mục để tự hiện form thông số. Bạn vẫn có thể thêm dòng tùy ý.
+                                    </small>
+                                </div>
+                            </div>
+
                         </div>
 
                         {{-- CỘT PHẢI: ẢNH & LƯU Ý --}}
@@ -463,6 +499,7 @@
 
                 {{-- các hidden giống form cũ --}}
                 <input type="hidden" name="pid" id="upd_pid">
+                <input type="hidden" name="variant_id" id="upd_variant_id">
                 <input type="hidden" name="old_image_01" id="upd_old_image_01">
                 <input type="hidden" name="old_image_02" id="upd_old_image_02">
                 <input type="hidden" name="old_image_03" id="upd_old_image_03">
@@ -471,7 +508,6 @@
                     <div class="modal-grid">
                         {{-- ==== CỘT TRÁI ==== --}}
                         <div class="modal-left">
-
                             <div class="inputRow">
                                 <div class="inputBox inputBox-full">
                                     <span>Tên Sản Phẩm *</span>
@@ -483,13 +519,15 @@
                             <div class="inputRow">
                                 <div class="inputBox">
                                     <span>Danh Mục *</span>
-                                    <select name="category" id="upd_category" class="box" required>
+                                    <select name="category_id" id="upd_category_id" class="box" required>
                                         <option value="" disabled>Chọn danh mục sản phẩm</option>
                                         @foreach ($categories as $category)
-                                            <option value="{{ $category->category_name }}">
+                                            <option value="{{ $category->category_id }}"
+                                                data-slug="{{ \Illuminate\Support\Str::slug($category->category_name) }}">
                                                 {{ $category->category_name }}
                                             </option>
                                         @endforeach
+
                                     </select>
                                 </div>
 
@@ -508,10 +546,11 @@
                                         name="price" required>
                                 </div>
                                 <div class="inputBox">
-                                    <span>Số lượng tồn kho *</span>
-                                    <input type="number" min="0" class="box" id="upd_inventory"
-                                        name="inventory" required>
+                                    <span>Mã giảm giá</span>
+                                    <input type="number" min="0" max="100" class="box"
+                                        id="upd_discount" name="discount">
                                 </div>
+
                             </div>
 
                             <div class="inputRow">
@@ -520,14 +559,7 @@
                                     <input type="number" min="0" max="9999999999" class="box"
                                         id="upd_purchase_price" name="purchase_price" required>
                                 </div>
-                                <div class="inputBox">
-                                    <span>Số lượng đã bán</span>
-                                    <input type="number" min="0" class="box" id="upd_qty_sold"
-                                        name="qty_sold" readonly
-                                        style="opacity: 0.6; cursor: not-allowed; background-color: #f5f5f5;">
-                                </div>
                             </div>
-
                             <div class="inputRow">
                                 <div class="inputBox">
                                     <span>Thương Hiệu *</span>
@@ -540,35 +572,23 @@
                                         @endforeach
                                     </select>
                                 </div>
-
-                                <div class="inputBox">
-                                    <span>Màu sắc *</span>
-                                    <select name="color" id="upd_color" class="box" required>
-                                        <option value="" disabled>Chọn màu sản phẩm</option>
-                                        @foreach ($color as $colorP)
-                                            <option value="{{ $colorP->colorProduct }}">
-                                                {{ $colorP->colorProduct }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
                             </div>
-
-                            <div class="inputRow">
-                                <div class="inputBox">
-                                    <span>Mã giảm giá</span>
-                                    <input type="number" min="0" max="100" class="box"
-                                        id="upd_discount" name="discount">
-                                </div>
-                            </div>
-
                             <div class="inputRow">
                                 <div class="inputBox inputBox-full">
                                     <span>Mô tả sản phẩm *</span>
                                     <textarea class="box" id="upd_details" name="details" rows="4" maxlength="500" required></textarea>
                                 </div>
                             </div>
-
+                            <div class="inputRow">
+                                <div class="inputBox inputBox-full">
+                                    <span>Thông số kỹ thuật</span>
+                                    <div id="updSpecFields"></div>
+                                    <button type="button" class="btn-light" id="updAddSpecRowBtn"
+                                        style="margin-top:10px;">
+                                        + Thêm dòng thông số
+                                    </button>
+                                </div>
+                            </div>
                         </div>
 
                         {{-- ==== CỘT PHẢI: ẢNH ==== --}}
@@ -643,11 +663,199 @@
             </form>
         </div>
     </div>
+    <div class="modal-overlay" id="addVariantModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog--wide">
+            <div class="modal-header">
+                <div>
+                    <h2>Quản lý Màu Sắc</h2>
+                    <p class="modal-subtitle">Thêm màu & xem danh sách màu của sản phẩm</p>
+                </div>
 
+                <button type="button" class="modal-close" id="closeAddVariantModal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="modal-grid modal-grid--2col">
+
+                    {{-- LEFT: Thêm màu (giữ nguyên form store của bạn) --}}
+                    <div class="modal-left">
+                        <div class="panel panel--tint">
+                            <h3 class="panel-title">Thêm Màu Mới</h3>
+
+                            <form id="addVariantForm" method="POST" enctype="multipart/form-data"
+                                action="{{ route('variants.store') }}">
+                                @csrf
+                                <input type="hidden" name="product_id" id="av_product_id">
+
+                                <div class="inputRow">
+                                    <div class="inputBox">
+                                        <span>Màu sắc *</span>
+                                        <select name="colorProduct_id" id="av_colorProduct_id" class="box" required>
+                                            <option value="" disabled selected>Chọn màu</option>
+                                            @foreach ($color as $c)
+                                                <option value="{{ $c->colorProduct_id }}">{{ $c->colorProduct }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="inputBox">
+                                        <span>Tồn kho *</span>
+                                        <input type="number" name="inventory" class="box" min="0"
+                                            value="0" required>
+                                    </div>
+                                </div>
+
+                                <div class="inputRow">
+                                    <div class="inputBox inputBox-full">
+                                        <span>Ảnh 01 *</span>
+                                        <input type="file" name="image_01" accept="image/*" class="box" required>
+                                    </div>
+                                </div>
+
+                                <div class="inputRow">
+                                    <div class="inputBox inputBox-full">
+                                        <span>Ảnh 02 *</span>
+                                        <input type="file" name="image_02" accept="image/*" class="box" required>
+                                    </div>
+                                </div>
+
+                                <div class="inputRow">
+                                    <div class="inputBox inputBox-full">
+                                        <span>Ảnh 03 *</span>
+                                        <input type="file" name="image_03" accept="image/*" class="box" required>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn-primary btn-primary--block">
+                                    <i class="fa-solid fa-plus"></i> Thêm Màu
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    {{-- RIGHT: Danh sách màu của sản phẩm --}}
+                    {{-- RIGHT --}}
+                    <div class="panel">
+                        <div class="panel-head">
+                            <h3 class="panel-title">
+                                Danh Sách Màu (<span id="mcCount">0</span>)
+                            </h3>
+                        </div>
+
+                        {{-- LIST --}}
+                        <div class="color-list" id="mcList"></div>
+
+                        {{-- EDIT (ẩn mặc định) --}}
+                        <div class="mc-edit" id="mcEditWrap" hidden>
+                            <div class="mc-edit-head">
+                                <div class="mc-edit-title">Chỉnh sửa</div>
+                                <button type="button" class="mc-edit-close" id="mcEditClose" title="Đóng">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </div>
+
+                            <form id="mcEditForm" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                @method('PUT')
+
+                                <input type="hidden" id="mc_edit_vid" name="variant_id">
+
+                                {{-- Row: Tên màu + mã màu (giống ảnh) --}}
+                                <div class="mc-row">
+                                    <select class="mc-input" id="mc_edit_color_id" name="colorProduct_id" required>
+                                        <option value="" disabled>Chọn màu</option>
+                                        @foreach ($color as $c)
+                                            <option value="{{ $c->colorProduct_id }}"
+                                                data-hex="{{ $c->colorHex ?? '' }}">
+                                                {{ $c->colorProduct }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+
+
+                                    <div class="mc-colorbox">
+                                        <span class="mc-swatch-mini" id="mc_edit_swatch"></span>
+                                        <input type="text" class="mc-input mc-input--hex" id="mc_edit_hex"
+                                            placeholder="#FFFFFF" readonly>
+                                    </div>
+                                </div>
+
+                                {{-- Bạn có thể chỉnh tồn kho ở đây (nên có) --}}
+                                <div class="mc-row">
+                                    <label class="mc-label">Tồn kho</label>
+                                    <input type="number" class="mc-input" name="inventory" id="mc_edit_inventory"
+                                        min="0">
+                                </div>
+
+                                <div class="mc-label" style="margin-top:10px;">Hình Ảnh</div>
+
+                                {{-- IMAGE 01 --}}
+                                <div class="mc-imgrow">
+                                    <input type="file" class="mc-input" name="image_01" id="mc_edit_img1"
+                                        accept="image/*">
+                                    <a class="mc-preview" id="mc_prev1_link" href="#" target="_blank"
+                                        hidden>Preview</a>
+                                    <button type="button" class="mc-trash" data-remove="1" title="Xoá ảnh 1">
+                                        <i class="fa-regular fa-trash-can"></i>
+                                    </button>
+                                </div>
+                                <input type="hidden" name="remove_image_01" id="mc_remove_img1" value="0">
+
+                                {{-- IMAGE 02 --}}
+                                <div class="mc-imgrow">
+                                    <input type="file" class="mc-input" name="image_02" id="mc_edit_img2"
+                                        accept="image/*">
+                                    <a class="mc-preview" id="mc_prev2_link" href="#" target="_blank"
+                                        hidden>Preview</a>
+                                    <button type="button" class="mc-trash" data-remove="2" title="Xoá ảnh 2">
+                                        <i class="fa-regular fa-trash-can"></i>
+                                    </button>
+                                </div>
+                                <input type="hidden" name="remove_image_02" id="mc_remove_img2" value="0">
+
+                                {{-- IMAGE 03 --}}
+                                <div class="mc-imgrow">
+                                    <input type="file" class="mc-input" name="image_03" id="mc_edit_img3"
+                                        accept="image/*">
+                                    <a class="mc-preview" id="mc_prev3_link" href="#" target="_blank"
+                                        hidden>Preview</a>
+                                    <button type="button" class="mc-trash" data-remove="3" title="Xoá ảnh 3">
+                                        <i class="fa-regular fa-trash-can"></i>
+                                    </button>
+                                </div>
+                                <input type="hidden" name="remove_image_03" id="mc_remove_img3" value="0">
+
+                                <div class="mc-actions-bottom">
+                                    <button type="submit" class="mc-btn mc-btn--save">Lưu</button>
+                                    <button type="button" class="mc-btn mc-btn--cancel" id="mcEditCancel">Huỷ</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn-light" id="cancelAddVariant">Đóng</button>
+            </div>
+        </div>
+    </div>
 
 @endsection
 
 @push('scripts')
     <script src="{{ asset('assets') }}/js/admin_product.js"></script>
     <script src="{{ asset('assets/js/flash_toast.js') }}"></script>
+    <script>
+        window.MC_ROUTES = {
+            index: @json(route('variants.index_by_product', ['product' => '__ID__'])),
+            store: @json(route('variants.store')),
+            destroy: @json(route('variants.destroy', ['variant' => '__VID__'])),
+            update: @json(route('variants.update', ['variant' => '__VID__'])),
+        };
+    </script>
 @endpush

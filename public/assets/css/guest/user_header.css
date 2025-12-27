@@ -1,7 +1,7 @@
 /* ===== HEADER NEW ===== */
 
 .main-header {
-    background: #ffffff;
+    background: #e8332d;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
     position: sticky;
     top: 0;
@@ -9,9 +9,9 @@
 }
 
 .main-header__inner {
-    max-width: 1280px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 10px 24px;
+    padding: 15px 15px;
     display: flex;
     align-items: center;
     gap: 24px;
@@ -29,7 +29,7 @@
     width: 32px;
     height: 32px;
     border-radius: 10px;
-    background: #1d4ed8;
+    background: #fdfdfd;
     /* xanh dương giống app */
     display: flex;
     align-items: center;
@@ -44,7 +44,7 @@
 }
 
 .logo-text span {
-    color: #1d4ed8;
+    color: #fff;
 }
 
 /* Nav trái */
@@ -62,7 +62,7 @@
 }
 
 .nav-link:hover {
-    color: #1d4ed8;
+    color: #fff;
 }
 
 /* ===== DROPDOWN DANH MỤC ===== */
@@ -78,7 +78,7 @@
     border: none;
     background: transparent;
     font-size: 16px;
-    color: #1d4ed8;
+    color: #fff;
     /* xanh như hình */
     cursor: pointer;
     display: inline-flex;
@@ -210,7 +210,7 @@
 }
 
 .icon-btn:hover {
-    background: #f3f4f6;
+    background: #941e1e;
 }
 
 .icon-badge {
@@ -250,7 +250,7 @@
 
 .account-btn .chevron {
     font-size: 10px;
-    color: #6b7280;
+    color: #ffffff;
 }
 
 .account-menu {
@@ -294,7 +294,7 @@
 .account-menu__text {
     padding: 8px 14px;
     font-size: 13px;
-    color: #6b7280;
+    color: #000000;
 }
 
 .account-menu__link {
@@ -304,7 +304,7 @@
     padding: 8px 14px;
     font-size: 14px;
     text-decoration: none;
-    color: #111827;
+    color: #090909;
     background: transparent;
     border: none;
     cursor: pointer;
@@ -323,18 +323,18 @@
     font-weight: 700;
     font-size: 24px;
     /* trước là 20px */
-    color: #111827;
+    color: #ffffff;
 }
 
 .logo-text span {
-    color: #1d4ed8;
+    color: #ffffff;
 }
 
 /* Menu trái – chữ to hơn */
 .main-header__nav .nav-link {
     font-size: 16px;
     /* trước ~14px */
-    color: #374151;
+    color: #ffffff;
     text-decoration: none;
     padding: 8px 6px;
 }
@@ -345,7 +345,7 @@
     background: transparent;
     font-size: 16px;
     /* trước 14px */
-    color: #111827;
+    color: #ffffff;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -380,7 +380,7 @@
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    color: #111827;
+    color: #f8f9fb;
 }
 
 .icon-btn i {
@@ -398,7 +398,7 @@
     cursor: pointer;
     font-size: 15px;
     /* trước 14px */
-    color: #111827;
+    color: #f6f6f8;
 }
 
 .account-btn i {

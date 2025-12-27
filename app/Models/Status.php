@@ -12,4 +12,8 @@ class Status extends Model{
     protected $fillable = [
         'status_id','status',
     ];
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'status_id', 'status_id');
+    }
 }

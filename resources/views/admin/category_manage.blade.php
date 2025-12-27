@@ -12,10 +12,11 @@
     <div class="category-page">
         {{-- Thông báo --}}
         @if (session('success'))
-            <div class="alert-success">
-                {{ session('success') }}
+            <div class="alert-success js-flash">
+                <span>{{ session('success') }}</span>
             </div>
         @endif
+
         {{-- ========== HEADER + TAB ========== --}}
         <div class="page-top">
             <div class="page-title">
@@ -36,28 +37,6 @@
                     <i class="fa-solid fa-droplet"></i>
                     <span>Màu sắc</span>
                 </button>
-            </div>
-        </div>
-
-        {{-- ========== THẺ THỐNG KÊ (demo số) ========== --}}
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fa-regular fa-folder"></i>
-                </div>
-                <div class="stat-content">
-                    <p class="stat-label">Tổng danh mục</p>
-                    <p class="stat-value">{{ $categories->count() }}</p>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon purple">
-                    <i class="fa-solid fa-box-open"></i>
-                </div>
-                <div class="stat-content">
-                    <p class="stat-label">Tổng sản phẩm</p>
-                    <p class="stat-value">{{ $totalProducts }}</p> {{-- nếu có $totalProducts thì dùng biến --}}
-                </div>
             </div>
         </div>
 
@@ -136,7 +115,12 @@
                                         {{ $category->product_count ?? 0 }}
                                     </td>
                                     <td class="cell-actions">
-                                        {{-- Nếu sau có route edit / show thì thêm vào --}}
+                                        <button type="button" class="action-btn edit js-edit" title="Sửa"
+                                            data-type="category" data-id="{{ $category->category_id }}"
+                                            data-name="{{ $category->category_name }}"
+                                            data-action="{{ route('admin.category.update', $category->category_id) }}">
+                                            <i class="fa-regular fa-pen-to-square"></i>
+                                        </button>
                                         <a href="{{ route('admin.category.delete', ['category_id' => $category->category_id]) }}"
                                             class="action-btn delete" onclick="return confirm('Xóa danh mục này?');"
                                             title="Xóa">
@@ -211,6 +195,12 @@
                                     </td>
 
                                     <td class="cell-actions">
+                                        <button type="button" class="action-btn edit js-edit" title="Sửa"
+                                            data-type="brand" data-id="{{ $brand->brand_id }}"
+                                            data-name="{{ $brand->brand_name }}"
+                                            data-action="{{ route('admin.brand.update_brand', $brand->brand_id) }}">
+                                            <i class="fa-regular fa-pen-to-square"></i>
+                                        </button>
                                         <a href="{{ route('admin.brand.delete_brand', $brand->brand_id) }}"
                                             class="action-btn delete" onclick="return confirm('Xóa thương hiệu này?');"
                                             title="Xóa">
@@ -283,6 +273,12 @@
                                     </td>
 
                                     <td class="cell-actions">
+                                        <button type="button" class="action-btn edit js-edit" title="Sửa"
+                                            data-type="color" data-id="{{ $colorP->colorProduct_id }}"
+                                            data-name="{{ $colorP->colorProduct }}"
+                                            data-action="{{ route('admin.color.update_color', $colorP->colorProduct_id) }}">
+                                            <i class="fa-regular fa-pen-to-square"></i>
+                                        </button>
                                         <a href="{{ route('admin.color.delete_color', $colorP->colorProduct_id) }}"
                                             class="action-btn delete" onclick="return confirm('Xóa màu này?');"
                                             title="Xóa">
@@ -299,6 +295,60 @@
             </div>
         </div>
     </div> {{-- .category-page --}}
+    {{-- ===== MODAL EDIT (dùng chung) ===== --}}
+    <div id="editModal" class="a-modal" aria-hidden="true">
+        <div class="a-modal__backdrop js-close-modal"></div>
+
+        <div class="a-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+            <button type="button" class="a-modal__x js-close-modal" title="Đóng">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="a-modal__head">
+                <h2 id="editModalTitle" class="a-modal__title">Cập nhật</h2>
+                <p class="a-modal__sub">Chỉnh sửa thông tin và bấm “Cập nhật” để lưu.</p>
+            </div>
+
+            <form id="editForm" method="POST" class="a-modal__body">
+                @csrf
+                <input type="hidden" name="tab" id="editTab" value="category">
+
+                <div class="a-modal__grid">
+                    {{-- LEFT --}}
+                    <div class="a-card">
+                        <div class="a-card__title">Thông tin</div>
+
+                        <div class="a-field">
+                            <label class="a-label">Tên <span class="required">*</span></label>
+                            <input id="editName" name="name" type="text" class="a-input" required
+                                maxlength="100" placeholder="Nhập tên..." />
+                        </div>
+
+                        {{-- nếu sau này bạn muốn thêm trường khác theo type thì thêm tại đây --}}
+                    </div>
+
+                    {{-- RIGHT --}}
+                    <div class="a-card a-card--hint">
+                        <div class="a-card__title" id="editHintTitle">Gợi ý</div>
+                        <ul class="a-hint">
+                            <li>Đặt tên ngắn gọn, dễ hiểu.</li>
+                            <li>Tránh trùng tên đã có.</li>
+                            <li>Bấm “Cập nhật” để lưu thay đổi.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="a-modal__foot">
+                    <button type="button" class="btn-ghost js-close-modal">Hủy</button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        Cập nhật
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 @endsection
 @push('scripts')
     <script>
@@ -314,6 +364,27 @@
                 document.querySelector(target).classList.add('active');
             });
         });
+        (function() {
+            const params = new URLSearchParams(window.location.search);
+            const tab = params.get('tab'); // category | brand | color
+
+            const map = {
+                category: '#tab-category',
+                brand: '#tab-brand',
+                color: '#tab-color',
+            };
+
+            if (!tab || !map[tab]) return;
+
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+
+            const btn = document.querySelector(`.tab-btn[data-target="${map[tab]}"]`);
+            const pane = document.querySelector(map[tab]);
+
+            if (btn) btn.classList.add('active');
+            if (pane) pane.classList.add('active');
+        })();
 
         // ====== Toggle form thêm mới ======
         document.querySelectorAll('[data-toggle-form]').forEach(btn => {
@@ -337,5 +408,83 @@
                 });
             });
         });
+    </script>
+    <script>
+        (function() {
+            const modal = document.getElementById('editModal');
+            const form = document.getElementById('editForm');
+            const titleEl = document.getElementById('editModalTitle');
+            const hintTitleEl = document.getElementById('editHintTitle');
+            const inputName = document.getElementById('editName');
+            const inputTab = document.getElementById('editTab');
+
+            function openModal() {
+                modal.classList.add('is-open');
+                modal.setAttribute('aria-hidden', 'false');
+                setTimeout(() => inputName?.focus(), 0);
+            }
+
+            function closeModal() {
+                modal.classList.remove('is-open');
+                modal.setAttribute('aria-hidden', 'true');
+                form.setAttribute('action', '');
+                inputName.value = '';
+            }
+
+            // open
+            document.querySelectorAll('.js-edit').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const type = btn.dataset.type; // category | brand | color
+                    const name = btn.dataset.name || '';
+                    const action = btn.dataset.action || '';
+
+                    form.setAttribute('action', action);
+                    inputName.value = name;
+                    inputTab.value = type; // ✅ category|brand|color
+
+
+                    // đổi tiêu đề theo loại
+                    if (type === 'category') {
+                        titleEl.textContent = 'Cập nhật danh mục';
+                        hintTitleEl.textContent = 'Gợi ý cho danh mục';
+                        inputName.placeholder = 'Nhập tên danh mục...';
+                    } else if (type === 'brand') {
+                        titleEl.textContent = 'Cập nhật thương hiệu';
+                        hintTitleEl.textContent = 'Gợi ý cho thương hiệu';
+                        inputName.placeholder = 'Nhập tên thương hiệu...';
+                    } else {
+                        titleEl.textContent = 'Cập nhật màu sắc';
+                        hintTitleEl.textContent = 'Gợi ý cho màu sắc';
+                        inputName.placeholder = 'Nhập tên màu...';
+                    }
+
+                    openModal();
+                });
+            });
+
+            // close
+            modal.querySelectorAll('.js-close-modal').forEach(el => {
+                el.addEventListener('click', closeModal);
+            });
+
+            // ESC to close
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+            });
+
+        })();
+    </script>
+    <script>
+        (function() {
+            const flash = document.querySelector('.js-flash');
+            if (!flash) return;
+            // tự ẩn sau 3 giây
+            setTimeout(() => {
+                flash.style.transition = 'opacity .25s ease, transform .25s ease';
+                flash.style.opacity = '0';
+                flash.style.transform = 'translateY(-6px)';
+                setTimeout(() => flash.remove(), 260);
+            }, 3000);
+        })();
     </script>
 @endpush

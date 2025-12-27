@@ -1,21 +1,14 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // ... (phần code modal thêm / sửa người dùng của bạn ở trên)
-
-    // ===== TỰ ĐỘNG ẨN ALERT SAU 3 GIÂY =====
-    // ===== TOAST TỰ ĐỘNG ẨN =====
     const toasts = document.querySelectorAll('.js-auto-hide-toast');
     if (toasts.length > 0) {
         setTimeout(() => {
             toasts.forEach(toast => {
                 toast.classList.add('is-hidden');
-                // Xoá hẳn khỏi DOM sau khi transition xong
                 setTimeout(() => toast.remove(), 400);
             });
-        }, 3000); // 3 giây rồi ẩn, thích lâu hơn thì tăng số
+        }, 3000);
     }
-
 });
-// ===================== POPUP CHI TIẾT ĐƠN HÀNG =====================
 document.addEventListener('DOMContentLoaded', function () {
     const overlay = document.getElementById('orderDetailOverlay');
     const closeTop = document.getElementById('orderDetailClose');
@@ -58,7 +51,6 @@ document.addEventListener('DOMContentLoaded', function () {
             statusChip.classList.toggle('is-done', data.status !== 'pending');
         }
 
-        // ==== RENDER SẢN PHẨM ====
         if (itemsWrap) {
             itemsWrap.innerHTML = '';
 
@@ -69,12 +61,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     row.innerHTML = `
                     <div class="order-item-main">
-                        <div class="order-item-name">${item.product_name}</div>
-                        <div class="order-item-qty">Số lượng: ${item.quantity}</div>
-                    </div>
-                    <div class="order-item-price">
-                        ${item.total_price}
-                    </div>
+  <div class="order-item-name">${item.product_name}</div>
+  <div class="order-item-qty">Số lượng: ${item.quantity}</div>
+  ${item.color ? `<div class="order-item-color">Màu: ${item.color}</div>` : ``}
+</div>
+<div class="order-item-price">
+  ${item.total_price}
+</div>
+
                 `;
 
                     itemsWrap.appendChild(row);
@@ -84,17 +78,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     '<p class="order-items-empty">Không có sản phẩm trong đơn này.</p>';
             }
         }
-
         overlay.classList.remove('order-modal-hidden');
         document.body.classList.add('no-scroll');
     }
-
 
     function closeModal() {
         overlay.classList.add('order-modal-hidden');
         document.body.classList.remove('no-scroll');
     }
-
     buttons.forEach(btn => {
         btn.addEventListener('click', function (e) {
             e.preventDefault();
@@ -105,12 +96,11 @@ document.addEventListener('DOMContentLoaded', function () {
             fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
                 .then(res => res.json())
                 .then(data => {
-                    openModal(data); // hàm fill dữ liệu + mở popup
+                    openModal(data);
                 })
                 .catch(err => console.error(err));
         });
     });
-
     if (closeTop) closeTop.addEventListener('click', closeModal);
     if (closeBottom) closeBottom.addEventListener('click', closeModal);
 

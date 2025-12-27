@@ -1,0 +1,42 @@
+/* ===== Payment methods (step 2) ===== */
+
+.pay-item{
+  display:block;
+  cursor:pointer;
+  margin-bottom: 12px;
+}
+
+.pay-item input{
+  display:none;
+}
+
+.pay-box{
+  border:1px solid var(--line,#e5e7eb);
+  border-radius:12px;
+  padding:14px 14px;
+  background:#fff;
+}
+
+.pay-top{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:#111827;
+  font-size: 16px;
+}
+
+.pay-top i{
+  color:#dc2626;
+}
+
+.pay-sub{
+  margin-left: 28px;
+  margin-top: 6px;
+  font-size: 16px;
+  color:#6b7280;
+}
+
+.pay-item input:checked + .pay-box{
+  border-color:#fecaca;
+  box-shadow: 0 0 0 3px rgba(239,68,68,.12);
+}

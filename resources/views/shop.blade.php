@@ -37,13 +37,9 @@
                   <div class="original-price"><span></span>{{ $product->price }}<span>đ</span></div>      
                   <div class="flex"> 
                      <div class="discount-price"><span></span>{{ $product->price  * (1 - $product->discount / 100) }}<span>đ</span></div>                         
-                     <div class="inventory">
-                        {{ $product->inventory > 0 ? 'Còn hàng' : 'Hết hàng' }}
-                     </div>
                   </div>
                   <div class="discount-label">Giảm {{ $product->discount }}%</div>
 
-                  <input type="submit" value="Thêm vào giỏ hàng" class="btn" name="add_to_cart">
                </form>
             @endforeach
          @else

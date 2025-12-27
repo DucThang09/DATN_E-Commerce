@@ -190,10 +190,10 @@
                                 <td>{{ $product->id }}</td>
                                 <td class="col-name">{{ $product->name }}</td>
                                 <td>{{ number_format($product->purchase_price, 0, ',', '.') }}đ</td>
-                                <td>{{ number_format($product->price, 0, ',', '.') }}đ</td>
+                                <td>{{ number_format($product->sale_price ?? $product->price, 0, ',', '.') }}đ</td>
                                 <td>{{ $product->qty_sold }}</td>
                                 <td>{{ $product->inventory }}</td>
-                                <td>{{ number_format($product->revenue, 0, ',', '.') }}đ</td>
+                                <td>{{ number_format($product->revenue_calc ?? 0, 0, ',', '.') }}đ</td>
                                 <td class="text-right text-profit">
                                     {{ number_format($product->profit ?? 0, 0, ',', '.') }}đ
                                 </td>

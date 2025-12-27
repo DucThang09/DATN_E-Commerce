@@ -17,29 +17,22 @@ class OrderStatisticsController extends Controller
 {
     public function index(Request $request)
     {
-        // ===== 1. Lấy tháng/năm từ input (MM/YYYY), mặc định là tháng hiện tại =====
         $monthYear = $request->input('month_year', now()->format('m/Y'));
         [$month, $year] = explode('/', $monthYear);
 
-        // ===== 2. Base query: lọc đơn theo tháng / năm =====
         $baseQuery = Order::whereYear('placed_on', $year)
             ->whereMonth('placed_on', $month);
 
-        // Filter theo trạng thái thanh toán (completed / pending / canceled)
         if ($status = $request->input('payment_status')) {
             $baseQuery->where('payment_status', $status);
         }
 
-        // Filter theo phương thức thanh toán (cash on delivery, v.v.)
         if ($method = $request->input('method')) {
             $baseQuery->where('method', $method);
         }
 
-        // ===== 3. SUMMARY =====
-        // Số đơn trong tháng (sau khi áp filter)
         $totalOrders = (clone $baseQuery)->count();
 
-        // Tổng tiền đã BÁN: chỉ tính đơn completed
         $revenueQuery = (clone $baseQuery)->where('payment_status', 'completed');
         $totalRevenue = $revenueQuery->sum('total_price');
 

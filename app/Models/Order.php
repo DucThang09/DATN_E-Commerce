@@ -11,6 +11,7 @@ class Order extends Model
     protected $fillable = [
         'user_id', // Liên kết với người dùng
         'name',
+        'status_id',
         'number',
         'email',  // Thêm email nếu muốn lưu
         'method',
@@ -21,16 +22,28 @@ class Order extends Model
         'payment_status',
 
     ];
+    protected $appends = ['order_code'];
     protected $casts = [
         'placed_on' => 'datetime',
     ];
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');  // 'customer_id' là trường khóa ngoại trong bảng orders
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function items()
     {
         return $this->hasMany(\App\Models\OrderItem::class, 'order_id', 'id');
+    }
+    // app/Models/Order.php
+    public function orderStatus()
+    {
+        return $this->belongsTo(\App\Models\Status::class, 'status_id', 'status_id');
+    }
+
+
+    public function getOrderCodeAttribute(): string
+    {
+        return 'DH' . str_pad((string)$this->id, 8, '0', STR_PAD_LEFT);
     }
 }

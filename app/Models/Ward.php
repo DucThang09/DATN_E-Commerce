@@ -12,6 +12,7 @@ class Ward extends Model{
     protected $fillable = [
         'wards_id','district_id','name',
     ];
+     public $timestamps = false; 
 
     public function district()
     {

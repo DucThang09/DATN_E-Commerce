@@ -1,0 +1,494 @@
+:root {
+    --pbg: #f6f7fb;
+    --pcard: #ffffff;
+    --pborder: #eef0f4;
+    --ptext: #111827;
+    --pmuted: #6b7280;
+    --pred: #ef4444;
+    --pred2: #ff2d55;
+}
+
+.profile-topbar {
+    height: 56px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 16px ;
+    border-bottom: 1px solid var(--pborder);
+    background: #fff;
+    padding-left: 175px;
+}
+
+.ptb-back {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ptext);
+    text-decoration: none;
+    border: 1px solid var(--pborder);
+    background: #fff;
+}
+
+.ptb-title {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--ptext);
+}
+
+.ptb-spacer {
+    flex: 1;
+}
+
+.profile-page {
+    background: var(--pbg);
+    padding: 18px 16px 28px;
+    min-height: calc(100vh - 56px);
+}
+
+.profile-grid {
+    max-width: 1170px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 16px;
+    padding-right: 25px;
+}
+
+@media (max-width: 980px) {
+    .profile-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* LEFT CARD */
+.pcard {
+    background: var(--pcard);
+    border: 1px solid var(--pborder);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.pcard-banner {
+    height: 110px;
+    background: linear-gradient(90deg, #ff5a7a 0%, #ffa31a 100%);
+}
+
+.pcard-avatar-wrap {
+    position: relative;
+    padding: 0 18px;
+    margin-top: -52px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.pcard-avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 999px;
+    overflow: hidden;
+    border: 4px solid #fff;
+    background: #fff;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, .08);
+}
+
+.pcard-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.pcard-camera {
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    border: none;
+    background: var(--pred);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 16px rgba(239, 68, 68, .25);
+    cursor: pointer;
+    margin-left: -18px;
+    margin-bottom: 4px;
+}
+
+.pcard-user {
+    padding: 10px 18px 0;
+}
+
+.pcard-name {
+    margin: 8px 0 2px;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--ptext);
+}
+
+.pcard-email {
+    font-size: 13px;
+    color: var(--pmuted);
+}
+
+.pcard-role {
+    margin-top: 10px;
+}
+
+.role-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(239, 68, 68, .25);
+    background: rgba(239, 68, 68, .07);
+    color: #b91c1c;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.pcard-stats {
+    margin: 14px 18px 10px;
+    padding: 12px 10px;
+    border: 1px solid var(--pborder);
+    border-radius: 14px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    background: #fff;
+}
+
+.stat {
+    text-align: center;
+    padding: 4px 0;
+    border-right: 1px solid var(--pborder);
+}
+
+.stat:last-child {
+    border-right: 0;
+}
+
+.stat-num {
+    font-weight: 900;
+    font-size: 18px;
+    color: var(--ptext);
+}
+
+.stat-label {
+    font-size: 12px;
+    color: var(--pmuted);
+    margin-top: 2px;
+}
+
+.pcard-joined {
+    padding: 12px 18px 16px;
+    color: var(--pmuted);
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* RIGHT PANEL */
+.ppanel {
+    background: var(--pcard);
+    border: 1px solid var(--pborder);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.ptabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid var(--pborder);
+    background: #fff;
+}
+
+.ptab {
+    padding: 14px 10px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: var(--pmuted);
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    position: relative;
+}
+
+.ptab.is-active {
+    color: var(--pred);
+}
+
+.ptab.is-active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: var(--pred);
+}
+
+.pflash {
+    padding: 12px 16px 0;
+}
+
+.palert {
+    border-radius: 12px;
+    padding: 10px 12px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    border: 1px solid var(--pborder);
+    background: #fff;
+    margin-bottom: 10px;
+}
+
+.palert-success {
+    border-color: rgba(16, 185, 129, .25);
+    background: rgba(16, 185, 129, .06);
+    color: #065f46;
+}
+
+.palert-error {
+    border-color: rgba(239, 68, 68, .25);
+    background: rgba(239, 68, 68, .06);
+    color: #7f1d1d;
+}
+
+.ptab-panel {
+    display: none;
+    padding: 14px 16px 18px;
+}
+
+.ptab-panel.is-active {
+    display: block;
+}
+
+.psection-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 6px 0 10px;
+}
+
+.psection-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--ptext);
+}
+
+/* Buttons */
+.pbtn {
+    border: 1px solid var(--pborder);
+    background: #fff;
+    color: var(--ptext);
+    border-radius: 12px;
+    padding: 10px 12px;
+    font-weight: 800;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.pbtn-danger {
+    border: none;
+    background: var(--pred);
+    color: #fff;
+    box-shadow: 0 12px 22px rgba(239, 68, 68, .18);
+}
+
+.pbtn-ghost {
+    background: #fff;
+}
+
+.pactions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+/* Info view list (giống ảnh) */
+.info-list {
+    margin-top: 6px;
+}
+
+.info-item {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--pborder);
+}
+
+.info-item:last-child {
+    border-bottom: 0;
+}
+
+.info-ic {
+    width: 26px;
+    height: 26px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--pmuted);
+    background: #f3f4f6;
+}
+
+.info-label {
+    font-size: 12px;
+    color: var(--pmuted);
+    font-weight: 700;
+    margin-bottom: 3px;
+}
+
+.info-value {
+    font-size: 14px;
+    color: var(--ptext);
+    font-weight: 700;
+}
+
+.info-link {
+    color: var(--pred);
+    text-decoration: none;
+}
+
+/* Form */
+.pform {
+    margin-top: 6px;
+}
+
+.pgrid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+@media (max-width: 720px) {
+    .pgrid2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+.pfield {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.plabel {
+    display: block;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--pmuted);
+    margin-bottom: 6px;
+}
+
+.pinput {
+    width: 100%;
+    border: 1px solid var(--pborder);
+    border-radius: 12px;
+    padding: 11px 12px;
+    outline: none;
+    font-size: 14px;
+    background: #fff;
+}
+
+.ptextarea {
+    resize: vertical;
+    min-height: 92px;
+}
+
+.pinput.is-invalid {
+    border-color: rgba(239, 68, 68, .55);
+}
+
+.perr {
+    display: block;
+    margin-top: 6px;
+    color: #b91c1c;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* Password rules */
+.prules {
+    margin-top: 10px;
+    border: 1px solid var(--pborder);
+    border-radius: 14px;
+    padding: 12px;
+    background: #fff;
+}
+
+.prules-title {
+    font-weight: 900;
+    color: var(--ptext);
+    margin-bottom: 8px;
+}
+
+.prules-list {
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+    display: grid;
+    gap: 8px;
+}
+
+.prules-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--pmuted);
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.prules-list .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--pred);
+    display: inline-block;
+}
+
+/* Toggle view/edit */
+.pedit-mode {
+    display: none;
+}
+
+.ptab-panel.is-editing .pview-mode {
+    display: none;
+}
+
+.ptab-panel.is-editing .pedit-mode {
+    display: block;
+}
+/* ==== FIX: chặn CSS cũ làm bó layout (form-container / container) ==== */
+.profile-page {
+    width: 100%;
+    max-width: none !important;
+}
+
+.ppanel {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0;
+}
+
+.pcard {
+    width: 100%;
+    max-width: none;
+}

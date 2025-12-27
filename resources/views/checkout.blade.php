@@ -1,154 +1,128 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
+
 <head>
-   <meta charset="UTF-8">
-   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Checkout</title>
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-   <link rel="stylesheet" href="{{ asset('assets') }}/css/style.css">
-   <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('assets') }}/css/style.css">
+    <link rel="stylesheet" href="{{ asset('assets') }}/css/guest/checkout.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
 </head>
+
 <body>
-   
-@include('components.user_header')  
-<section class="checkout-orders">
-   @if (session('message'))
-      <div class="alert alert-success">{{ session('message') }}</div>
-   @endif
-   <form action="{{ route('checkout.placeOrder') }}" method="POST">
-      @csrf
 
-      <h3>Đơn Hàng Của Bạn</h3>
-
-      <div class="display-orders">
-         
-
-         @if ($cartItemsWP->isNotEmpty())
+    @include('components.user_header')
+    <section class="checkout-orders">
+        @if (session('message'))
+            <div class="alert alert-success">{{ session('message') }}</div>
+        @endif
+        <form action="{{ route('checkout.payment.post') }}" method="POST" id="formPlaceOrder">
+            @csrf
             @foreach ($cartItemsWP as $item)
-               
-               <p>{{ $item->name }} <span>({{ number_format($item->price, 0,',','.') . 'đ x ' . $item->quantity }})</span></p>
-               <input type="hidden" name="idCart[]" value="{{ $item->id }}">
+                <input type="hidden" name="idCart[]" value="{{ $item->id }}">
             @endforeach
-         @else
-            <p class="empty">Giỏ hàng của bạn đang trống!</p>
-         @endif
 
-         <input type="hidden" name="total_products" value="{{ $totalProducts }}">
-         
-         <input type="hidden" name="total_price" value="{{ $grandTotal }}">
-         <div class="grand-total">Tổng Cộng : <span>{{ number_format($grandTotal, 0,',','.') . 'đ'}}</span></div>
-      </div>
+            <input type="hidden" name="total_products" value="{{ $totalProducts ?? '' }}">
+            <input type="hidden" name="total_price" value="{{ $grandTotal ?? 0 }}">
+            <input type="hidden" name="method" value="cash on delivery">
 
-      <h3>Đặt hàng của bạn</h3>
+            <div class="cartcard checkout-card">
+                <div class="cartcard-head">
+                    <div class="cartcard-head__title checkout-title">Thông tin đặt hàng</div>
+                </div>
+                <div class="checkout-form">
+                    <div class="ck-row ck-1">
+                        <label class="ck-field">
+                            <span>Họ và tên <b class="req">*</b></span>
+                            <input type="text" name="name" class="ck-input" placeholder="Nhập họ và tên"
+                                value="{{ old('name', $form['name'] ?? '') }}" required>
+                        </label>
+                    </div>
+                    <div class="ck-row ck-2">
+                        <label class="ck-field">
+                            <span>Số điện thoại <b class="req">*</b></span>
+                            <input type="text" name="number" class="ck-input" placeholder="Nhập số điện thoại"
+                                value="{{ old('number', $form['number'] ?? '') }}" required>
+                        </label>
+                        <label class="ck-field">
+                            <span>Email</span>
+                            <input type="email" name="email" class="ck-input" placeholder="Nhập email"
+                                value="{{ old('email', $form['email'] ?? '') }}">
+                        </label>
+                    </div>
+                    <div class="ck-row ck-1">
+                        <label class="ck-field">
+                            <span>Địa chỉ <b class="req">*</b></span>
+                            <input type="text" name="flat" class="ck-input" placeholder="Số nhà, tên đường"
+                                value="{{ old('flat', $form['flat'] ?? '') }}" required>
+                        </label>
+                    </div>
+                    <div class="ck-row ck-3">
+                        <label class="ck-field">
+                            <span>Tỉnh/Thành phố <b class="req">*</b></span>
+                            <select id="province" name="province" class="ck-input"
+                                data-district-url="{{ url('/get-districts') }}" required>
+                                <option value="">Chọn tỉnh/thành</option>
+                                @foreach ($province as $provinces)
+                                    <option value="{{ $provinces->province_id }}"
+                                        {{ old('province', $form['province'] ?? '') == $provinces->province_id ? 'selected' : '' }}>
+                                        {{ $provinces->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </label>
+                        <label class="ck-field">
+                            <span>Quận/Huyện <b class="req">*</b></span>
+                            <select id="district" name="district" class="ck-input"
+                                data-old="{{ old('district', $form['district'] ?? '') }}"
+                                data-ward-url="{{ url('/get-wards') }}" disabled required>
+                                <option value="">Chọn quận/huyện</option>
+                            </select>
+                        </label>
+                        <label class="ck-field">
+                            <span>Phường/Xã <b class="req">*</b></span>
+                            <select id="ward" name="ward" class="ck-input"
+                                data-old="{{ old('ward', $form['ward'] ?? '') }}" disabled required>
+                                <option value="">Chọn phường/xã</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="ck-row ck-1">
+                        <label class="ck-field">
+                            <span>Ghi chú đơn hàng</span>
+                            <textarea name="note" class="ck-textarea"
+                                placeholder="Ghi chú về đơn hàng, ví dụ: thời gian hay chỉ dẫn địa điểm giao hàng chi tiết hơn">{{ old('note', $form['note'] ?? '') }}</textarea>
+                        </label>
+                    </div>
 
-      <div class="flex">
-         <div class="inputBox">
-            <span>Tên của bạn:</span>
-            <input type="text" name="name" placeholder="Nhập tên của bạn" class="box" maxlength="20" required>
-         </div>
-         <div class="inputBox">
-            <span>Số điện thoại :</span>
-            <input type="number" name="number" placeholder="Nhập số điện thoại" class="box" min="0" max="9999999999" required>
-         </div>
-         <div class="inputBox">
-            <span>Email:</span>
-            <input type="email" name="email" placeholder="Nhập email" class="box" maxlength="50">
-         </div>
-         <div class="inputBox">
-            <span>Phương thức thanh toán:</span>
-            <select name="method" class="box" required>
-               <option value="cash on delivery">Thanh toán khi nhận hàng</option>
-               <option value="credit card">Thanh toán bằng thẻ tín dụng</option>
-               
-            </select>
-         </div>
-         <div class="inputBox">
-            <span>Tỉnh thành:</span>
-            <select class="box" id="province" name="province" >
-               <option value="">Chọn Tỉnh Thành</option>
-               @foreach ($province as $provinces)
-                  <option value="{{ $provinces->province_id }}">{{ $provinces->name }}</option>
-               @endforeach
-               
-            </select>
-         </div>
-         <div class="inputBox">
-            <span>Quận Huyện:</span>
-            <select name="district" id="district" class="box" >
-               <option value="">Chọn Quận Huyện</option>
-               
-               
-            </select>
-         </div>
-         <div class="inputBox">
-            <span>Xã/phường:</span>
-            <input type="text" name="ward" placeholder="Nhập xã/phường" class="box" maxlength="50" required>
-         </div>
-         
-         <div class="inputBox">
-            <span>Tên đường, số nhà:</span>
-            <input type="text" name="flat" placeholder="Nhập tên đường và số nhà" class="box" maxlength="50" required>
-         </div>
-      </div>
+                    <div class="ck-actions">
+                        <a href="{{ route('checkout.info') }}" class="ck-btn ghost">Quay lại</a>
+                        <button type="submit" class="ck-btn primary">Tiếp tục</button>
+                    </div>
+                </div>
 
-      <input type="submit" name="order" class="btn {{ $grandTotal > 0 ? '' : 'disabled' }}" value="Đặt hàng">
-   </form>
-</section>
+            </div>
+        </form>
+        @include('components.cart_summary', [
+            'grandTotal' => $grandTotal,
+            'vatRate' => 0,
+            'shipping' => 0,
+        ])
+    </section>
 
-
-@include('components.footer')
-
-<script src="{{ asset('assets') }}/js/script.js"></script>
-
-<script>
-$(document).ready(function() {
-// Khi thay đổi tỉnh/thành phố
-   $('#province').on('change', function() {
-      var province_id = $(this).val();
-      if (province_id) {
-            $.ajax({
-               url: '/get-districts',
-               method: 'GET',
-               data: { province_id: province_id },
-               success: function(data) {
-                  $('#district').empty().append('<option value="">Chọn một quận/huyện</option>');
-                  $.each(data, function(i, district) {
-                        $('#district').append($('<option>', {
-                           value: district.id,
-                           text: district.name
-                        }));
-                  });
-                  $('#wards').empty().append('<option value="">Chọn một xã</option>');
-               },
-               error: function(xhr, textStatus, errorThrown) {
-                  console.log('Error: ' + errorThrown);
-               }
-            });
-      } else {
-            $('#district').empty().append('<option value="">Chọn một quận/huyện</option>');
-            $('#wards').empty().append('<option value="">Chọn một xã</option>');
-      }
-   });
-
-   
-   
-});
-
-</script>
-
-<script>
-$(document).ready(function() {
-    $('form').on('submit', function(e) {
-        var paymentMethod = $("select[name='method']").val();
-        
-        if (paymentMethod !== 'cash on delivery') {
-            e.preventDefault();
-            alert('Chức năng này đang được phát triển. Vui lòng chọn "Thanh toán khi nhận hàng".');
-        }
-    });
-});
-</script>
-
+    @include('components.footer')
+    <script src="{{ asset('assets') }}/js/guest/checkout_wizard.js"></script>
+    <script>
+        window.CART_ROUTES = {
+            checkoutSelected: "{{ route('checkout.selected') }}",
+            removeSelected: "{{ route('remove.selected') }}",
+            updateQty: "{{ route('cart.update') }}",
+        };
+    </script>
 </body>
+
 </html>

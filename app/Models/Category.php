@@ -15,7 +15,8 @@ class Category extends Model
     protected $primaryKey = 'category_id';
 
     protected $fillable = [
-        'category_name',
+        'category_id',
+        'category_name',    
         'slug',
         // nếu muốn có thêm show_on_home thì thêm vào đây nữa
     ];

@@ -47,7 +47,7 @@ class DashBoardController extends Controller
         $numberOfUsers    = User::count();
         $numberOfAdmins   = Admin::count();
         $numberOfMessages = Message::count();
-        $totalInventory = Product::sum('inventory');
+        $totalInventory = DB::table('product_variants')->sum('inventory');
 
         // Trả về view
         return view('admin.dashboard', compact(

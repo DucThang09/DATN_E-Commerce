@@ -39,45 +39,29 @@
                     </a>
                 </li>
 
-                {{-- NHÓM SẢN PHẨM + DANH MỤC --}}
-                <li
-                    class="sidebar-group
-    {{ request()->routeIs('admin.products*') || request()->routeIs('admin.category_manage*') ? 'open' : '' }}">
-
-                    {{-- menu cha: Sản phẩm --}}
-                    <div class="sidebar-parent">
+                {{-- QUẢN LÍ SẢN PHẨM (đi thẳng route admin.products) --}}
+                <li>
+                    <a href="{{ route('admin.products') }}"
+                        class="{{ request()->routeIs('admin.products*') ? 'active' : '' }}">
                         <i class="fa-solid fa-box"></i>
-                        <span class="menu-text">Sản phẩm</span>
-                        <span class="sidebar-arrow">
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </span>
-                    </div>
-
-                    {{-- menu con: Tất cả SP + Danh mục --}}
-                    <ul class="sidebar-submenu">
-                        <li>
-                            <a href="{{ route('admin.products') }}"
-                                class="sidebar-sub-link {{ request()->routeIs('admin.products*') ? 'active' : '' }}">
-                                <span class="submenu-dot"></span>
-                                <span>Tất cả sản phẩm</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('admin.category_manage') }}"
-                                class="sidebar-sub-link {{ request()->routeIs('admin.category_manage*') ? 'active' : '' }}">
-                                <span class="submenu-dot"></span>
-                                <span>Danh mục</span>
-                            </a>
-                        </li>
-                    </ul>
+                        <span class="menu-text">Quản lí sản phẩm</span>
+                    </a>
                 </li>
 
+                {{-- QUẢN LÍ DANH MỤC (mục riêng, không còn là mục con) --}}
+                <li>
+                    <a href="{{ route('admin.category_manage') }}"
+                        class="{{ request()->routeIs('admin.category_manage*') ? 'active' : '' }}">
+                        <i class="fa-solid fa-list"></i>
+                        <span class="menu-text">Quản lí Danh mục</span>
+                    </a>
+                </li>
 
                 <li>
                     <a href="{{ route('admin.placed_orders') }}"
                         class="{{ request()->routeIs('admin.placed_orders*') ? 'active' : '' }}">
                         <i class="fa-solid fa-receipt"></i>
-                        <span class="menu-text">Đơn hàng</span>
+                        <span class="menu-text">Quản lí đơn hàng</span>
                     </a>
                 </li>
 
@@ -85,7 +69,7 @@
                     <a href="{{ route('admin.users_accounts') }}"
                         class="{{ request()->routeIs('admin.users_accounts*') ? 'active' : '' }}">
                         <i class="fa-solid fa-user-group"></i>
-                        <span class="menu-text">Người dùng</span>
+                        <span class="menu-text">Quản lí Người dùng</span>
                     </a>
                 </li>
 
@@ -95,7 +79,7 @@
                         <a href="{{ route('admin.accounts') }}"
                             class="{{ request()->routeIs('admin.accounts*') ? 'active' : '' }}">
                             <i class="fa-solid fa-user-shield"></i>
-                            <span class="menu-text">Quản trị viên</span>
+                            <span class="menu-text">Quản lí nhân viên</span>
                         </a>
                     </li>
                 @endif
@@ -104,11 +88,11 @@
                     <a href="{{ route('admin.revenue_statistics') }}"
                         class="{{ request()->routeIs('admin.revenue_statistics*') ? 'active' : '' }}">
                         <i class="fa-solid fa-chart-line"></i>
-                        <span class="menu-text">Thống kê</span>
+                        <span class="menu-text">Thống kê và báo cáo</span>
                     </a>
                 </li>
-
             </ul>
+
         </aside>
 
         <!-- ========== MAIN ========== -->
@@ -136,7 +120,7 @@
                             'admin.category_manage' => 'Danh mục',
                         ];
 
-                        $currentTitle = $pageNames[$routeName] ?? 'Trang hiện tại';
+                        $currentTitle = $pageNames[$routeName] ?? 'Thống kê theo tháng';
                     @endphp
 
                     <div class="page-breadcrumb">

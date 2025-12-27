@@ -4,67 +4,92 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;   // 👈 THÊM DÒNG NÀY
+use Illuminate\Support\Facades\DB;
 use App\Models\Product;
 
 class RevenueStatistics extends Controller
 {
     public function index(Request $request)
     {
-        // ====== LỌC CHUNG (search + trạng thái) ======
-        $baseQuery = Product::query();
+        /**
+         * 1) Subquery: gom tồn kho + đã bán theo product_id từ bảng product_variants
+         */
+        $pvAgg = DB::table('product_variants')
+            ->selectRaw('product_id, SUM(qty_sold) as qty_sold, SUM(inventory) as inventory')
+            ->groupBy('product_id');
 
-        // Search theo tên sản phẩm
+        /**
+         * 2) Base query: join products với pvAgg
+         * - qty_sold / inventory giờ lấy từ pv (đã SUM)
+         */
+        $baseQuery = Product::query()
+            ->leftJoinSub($pvAgg, 'pv', function ($join) {
+                $join->on('pv.product_id', '=', 'products.id');
+            });
+
+        // Search theo tên
         if ($search = $request->input('search')) {
-            $baseQuery->where('name', 'like', '%' . $search . '%');
+            $baseQuery->where('products.name', 'like', '%' . $search . '%');
         }
 
         // Filter trạng thái: đã bán > 0 / sắp hết hàng
         if ($status = $request->input('status_filter')) {
             if ($status === 'sold_gt_0') {
-                $baseQuery->where('qty_sold', '>', 0);
+                $baseQuery->whereRaw('COALESCE(pv.qty_sold,0) > 0');
             } elseif ($status === 'low_stock') {
-                $baseQuery->where('inventory', '<', 10); // ngưỡng sắp hết
+                $baseQuery->whereRaw('COALESCE(pv.inventory,0) < 10'); // ngưỡng sắp hết
             }
         }
 
-        // ====== SUMMARY: tổng lợi nhuận + top sản phẩm ======
+        /**
+         * 3) SUMMARY: tổng lợi nhuận + top sản phẩm
+         * profit = revenue - qty_sold * purchase_price
+         * (revenue trong bảng products của bạn)
+         */
+        $salePriceExpr = '(COALESCE(products.price,0) * (1 - COALESCE(products.discount,0)/100.0))';
+        $revenueExpr   = '(COALESCE(pv.qty_sold,0) * ' . $salePriceExpr . ')';
+        $profitExpr    = '(COALESCE(pv.qty_sold,0) * (' . $salePriceExpr . ' - COALESCE(products.purchase_price,0)))';
         $totalProfit = (clone $baseQuery)
-            ->select(DB::raw('SUM(revenue - qty_sold * purchase_price) AS total_profit'))
+            ->selectRaw("SUM($profitExpr) as total_profit")
             ->value('total_profit') ?? 0;
 
         $topProduct = (clone $baseQuery)
-            ->select('*', DB::raw('(revenue - qty_sold * purchase_price) AS profit'))
-            ->orderByDesc(DB::raw('revenue - qty_sold * purchase_price'))
+            ->selectRaw("products.*, COALESCE(pv.qty_sold,0) as qty_sold, COALESCE(pv.inventory,0) as inventory, $salePriceExpr as sale_price, $revenueExpr as revenue_calc, $profitExpr as profit")
+            ->orderByRaw("$profitExpr DESC")
             ->first();
 
-        // ====== DANH SÁCH CHI TIẾT + SORT ======
+
+        /**
+         * 4) LIST + SORT + PAGINATE
+         */
         $sortBy = $request->input('sort_by', 'id');
         $order  = $request->input('order', 'asc');
+        $order  = strtolower($order) === 'desc' ? 'desc' : 'asc';
 
         $productsQuery = (clone $baseQuery)
-            ->select(
-                'id',
-                'name',
-                'purchase_price',
-                'price',
-                'qty_sold',
-                'inventory',
-                'revenue'
-            )
-            ->selectRaw('(revenue - qty_sold * purchase_price) AS profit'); // 👈 alias profit
+            ->selectRaw("
+            products.id,
+            products.name,
+            products.purchase_price,
+            products.price,
+            COALESCE(products.discount,0) as discount,             
+            COALESCE(products.revenue,0) as revenue,
+            COALESCE(pv.qty_sold,0) as qty_sold,
+            COALESCE(pv.inventory,0) as inventory,
+             $salePriceExpr as sale_price,
+            $revenueExpr as revenue_calc,
+            $profitExpr as profit
+        ");
 
+        // chỉ cho sort các cột hợp lệ
         $allowSort = ['id', 'price', 'purchase_price', 'qty_sold', 'inventory', 'revenue', 'profit'];
 
-        if (in_array($sortBy, $allowSort, true)) {
-            if ($sortBy === 'profit') {
-                $productsQuery->orderBy('profit', $order);
-            } else {
-                $productsQuery->orderBy($sortBy, $order);
-            }
-        } else {
-            $productsQuery->orderBy('id', 'asc');
+        if (!in_array($sortBy, $allowSort, true)) {
+            $sortBy = 'id';
         }
+
+        // sort theo alias (profit/qty_sold/inventory đều là alias ở selectRaw)
+        $productsQuery->orderBy($sortBy, $order);
 
         $products = $productsQuery
             ->paginate(10)
@@ -77,7 +102,6 @@ class RevenueStatistics extends Controller
         ));
     }
 
-    // Cho route search / sort cũ dùng chung logic
     public function search(Request $request)
     {
         return $this->index($request);
